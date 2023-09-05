@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "303fbcb7c08a59cb7fcb732955a666b09159ab4f8705c836c04992dc4ad2ddde"
+            "sha256": "32d5893615ea3ef3eb69e9162a67b0a19408d8447a42b637d85d4092776405cc"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -67,6 +67,10 @@
         "cb-firebase-push-notifications": {
             "editable": true,
             "path": "./modules/firebase_push_notifications"
+        },
+        "cb-terms-and-conditions": {
+            "editable": true,
+            "path": "./modules/terms_and_conditions"
         },
         "certifi": {
             "hashes": [

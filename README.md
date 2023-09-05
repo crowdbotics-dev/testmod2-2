@@ -61,6 +61,7 @@ This section will show any installed modules you add from the Storyboard Modules
 - [react-native-push-notifications](modules/push-notifications)
 - [firebase-push-notifications]()
 - [react-native-user-profile](modules/user-profile)
+- [terms-and-conditions]()
 
 # Getting started: Frontend
 

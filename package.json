@@ -16,6 +16,7 @@
     "@babel/polyfill": "^7.12.1",
     "@modules/firebase-push-notifications": "file:./modules/firebase-push-notifications",
     "@modules/push-notifications": "file:./modules/push-notifications/",
+    "@modules/terms-and-conditions": "file:./modules/terms-and-conditions",
     "@modules/user-profile": "file:./modules/user-profile/",
     "@react-native-community/push-notification-ios": "^1.8.0",
     "@react-native-firebase/app": "^12.7.2",

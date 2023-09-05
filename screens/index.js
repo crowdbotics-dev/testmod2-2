@@ -1,93 +1,115 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Text,
   View,
   StyleSheet,
   Image,
   TextInput,
-  Pressable,
-  ScrollView
+  ScrollView,
+  Pressable
 } from "react-native";
+
 import { Slider } from "react-native-elements";
-const BudgetFilter = () => {
-  const [options, setOptions] = useState([]);
+
+const Filter = () => {
+  const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState([]);
   const [rangeStart, setRangeStart] = useState("");
   const [rangeEnd, setRangeEnd] = useState("");
-  const [selectedOptions, setSelectedOptions] = useState([]);
-  useEffect(() => {
-    setOptions(["Per Hour", "Per Day", "Per Week", "Per Month"]);
-  }, []);
-  const handleSelect = option => {
-    const newSelectedOptions = [...selectedOptions];
-    if (newSelectedOptions.includes(option)) {
-      newSelectedOptions.splice(newSelectedOptions.indexOf(option), 1);
+  const [location, setLocation] = useState("");
+  const [age, setAge] = useState("");
+  const [grades, setGrades] = useState("");
+  const [interests, setInterests] = useState("");
+  const handleSelection = (title) => {
+    if (selected.includes(title)) {
+      setSelected(selected.filter((item) => item !== title));
     } else {
-      newSelectedOptions.push(option);
+      setSelected([...selected, title]);
     }
-    setSelectedOptions(newSelectedOptions);
   };
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <Text style={styles.heading}>Filter/Budget</Text>
-        <View style={styles.frequencyList}>
-          {options.map((option, index) => (
-            <Tile
-              key={index}
-              option={option}
-              selected={selectedOptions.includes(option)}
-              onPress={() => handleSelect(option)}
-            />
-          ))}
-        </View>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Input
+          text="Filter"
+          value={search}
+          onChange={setSearch}
+          icon={require("./assets/filterIcon.png")}
+        />
+        <Separator title={"Desired Days"} />
+        <Tile
+          title={"Sunday"}
+          selected={selected.includes("Sunday")}
+          onPress={(x) => handleSelection(x)}
+        />
+        <Tile
+          title={"Wednesday"}
+          selected={selected.includes("Wednesday")}
+          onPress={(x) => handleSelection(x)}
+        />
+        <Separator title={"Desired Days"} />
+        <Tile
+          title={"Half-Day Mornins"}
+          selected={selected.includes("Half-Day Mornins")}
+          onPress={(x) => handleSelection(x)}
+        />
+        <Tile
+          title={"Full Day"}
+          selected={selected.includes("Full Day")}
+          onPress={(x) => handleSelection(x)}
+        />
+        <Separator title={"Budget"} />
+        <Tile
+          title={"Per week"}
+          selected={selected.includes("Per week")}
+          onPress={(x) => handleSelection(x)}
+        />
         <View style={styles.halfInputs}>
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputText}>From</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={text => setRangeStart(text)}
-              value={rangeStart}
-              placeholder="Enter"
-              placeholderTextColor="#9B9B9B"
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputText}>Search</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={text => setRangeEnd(text)}
-              value={rangeEnd}
-              placeholder="Enter"
-              placeholderTextColor="#9B9B9B"
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
-          </View>
-        </View>
-        <View style={styles.sliderContainer}>
-          <Text style={styles.heading}>Set Pricing</Text>
-          <Slider
-            minimumValue={0}
-            maximumValue={100}
-            minimumTrackTintColor="#000"
-            maximumTrackTintColor="#9B9B9B"
-            thumbTintColor="#000"
-            step={1}
-            value={50}
-            // thumb size
-            thumbStyle={styles.thumb}
+          <Input
+            text="From"
+            value={rangeStart}
+            onChange={setRangeStart}
+            containerStyle={styles.inputContainer}
+          />
+          <Input
+            text="To"
+            value={rangeEnd}
+            onChange={setRangeEnd}
+            containerStyle={styles.inputContainer}
           />
         </View>
-        <View style={styles.button}>
-          <Button buttonText={"Done"} />
-        </View>
+        <Slider
+          minimumValue={0}
+          maximumValue={100}
+          minimumTrackTintColor="#a1a1a1"
+          maximumTrackTintColor="#e6e6e6"
+          thumbTintColor="#000"
+          thumbStyle={styles.thumb}
+          step={1}
+          value={50}
+        />
+        <Separator title={"Activity"} />
+        <Input
+          text="Location"
+          value={location}
+          onChange={setLocation}
+          placeholder="10 miles"
+        />
+        <Input text="Age" value={age} onChange={setAge} />
+        <Input text="Grades" value={grades} onChange={setGrades} />
+        <Input text="Interests" value={interests} onChange={setInterests} />
+        <TabView
+          tabTitles={["Interest", "Interest", "Interest"]}
+          style={styles.tabs}
+          backgroundColor="#fff"
+          selected={0}
+          tabColor="#f1f1f1"
+        />
+        <Button buttonText="Apply" />
       </ScrollView>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -95,37 +117,83 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20
   },
   heading: {
-    fontSize: 16,
-    marginVertical: 10
-  },
-  frequencyList: {
-    marginTop: 40
-  },
-  tile: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 10,
-    borderBottomColor: "#F0F2F7",
-    borderBottomWidth: 1,
-    paddingHorizontal: 10
-  },
-  optionName: {
-    flex: 1
+    fontSize: 20
   },
   halfInputs: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 20
+    marginTop: 20,
+    justifyContent: "space-between"
   },
   inputContainer: {
+    flex: 1,
+    marginHorizontal: 10
+  },
+  thumb: {
+    width: 20,
+    height: 20
+  },
+  tabs: {
+    backgroundColor: "#fff",
+    justifyContent: "space-between",
+    width: "100%"
+  }
+});
+
+export default Filter;
+const Input = (props) => {
+  return (
+    <View style={[inputStyles.inputContainer, props.containerStyle]}>
+      {props.text
+        ? (
+        <Text style={inputStyles.inputText}>{props.text}</Text>
+          )
+        : null}
+
+      <TextInput
+        style={[
+          inputStyles.input,
+          props.style,
+          props.textArea ? inputStyles.textArea : null
+        ]}
+        placeholder={props.placeholder ? props.placeholder : "Enter"}
+        value={props.value}
+        onChangeText={(text) => props.onChange(text)}
+        placeholderTextColor={
+          props.placeholderTextColor ? props.placeholderTextColor : "#9B9B9B"
+        }
+        editable={props.editable !== false}
+        autoCapitalize="none"
+        autoCorrect={false}
+        multiline={!!props.textArea}
+      />
+      {props.errorText
+        ? (
+        <Text style={inputStyles.error}>{props.errorText}</Text>
+          )
+        : null}
+      {props.icon
+        ? (
+        <Image
+          source={props.icon}
+          style={
+            props.text ? inputStyles.iconWithText : inputStyles.iconWithoutText
+          }
+        />
+          )
+        : null}
+      <View style={styles.children}>{props.children}</View>
+    </View>
+  );
+};
+
+const inputStyles = StyleSheet.create({
+  inputContainer: {
     flexDirection: "column",
-    justifyContent: "center",
-    marginHorizontal: 5,
-    flex: 1
+    justifyContent: "center"
+    // flex: 1
   },
   inputText: {
-    fontSize: 16,
+    fontSize: 14,
     marginLeft: 20,
     color: "#111112"
   },
@@ -139,57 +207,208 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 50
   },
-  sliderContainer: {
-    marginTop: 20
+  iconWithText: {
+    position: "absolute",
+    right: 30,
+    top: 48,
+    width: 15,
+    height: 15,
+    resizeMode: "contain"
   },
-  thumb: {
-    width: 20,
-    height: 20
+  iconWithoutText: {
+    position: "absolute",
+    right: 30,
+    top: 28,
+    width: 15,
+    height: 15,
+    resizeMode: "contain"
   },
-  button: {
-    marginTop: 120
+  textArea: {
+    height: 150
   },
-  checkbox: {
-    width: 25,
-    height: 25
-  }
+  children: {}
 });
 
-export default BudgetFilter;
-
-const Tile = ({ option, selected, onPress }) => {
+const TabView = ({
+  tabTitles,
+  selected,
+  onPress,
+  tabColor,
+  backgroundColor,
+  style
+}) => {
+  const tabColorStyle = {
+    backgroundColor: tabColor || "#fff"
+  };
+  const backgroundColorStyle = {
+    backgroundColor: backgroundColor || "#F1F1F1"
+  };
+  const propStyle = style || {};
   return (
-    <View style={styles.tile}>
-      <Text style={styles.optionName}>{option}</Text>
-      <Pressable onPress={onPress}>
-        <Image
-          source={
-            selected
-              ? require("./assets/checkboxIconActive.png")
-              : require("./assets/checkboxIcon.png")
+    <View
+      style={[tabViewStyles.paletteContainer, backgroundColorStyle, propStyle]}
+    >
+      {tabTitles.map((title, index) => (
+        <Pressable
+          onPress={() => (onPress ? onPress(index) : null)}
+          style={
+            index === selected
+              ? [tabViewStyles.selected, tabColorStyle]
+              : [tabViewStyles.unSelected, backgroundColorStyle]
           }
-          style={styles.checkbox}
-        />
-      </Pressable>
+          key={index}
+        >
+          <Text>{title}</Text>
+        </Pressable>
+      ))}
     </View>
   );
 };
 
-const Button = params => {
+const tabViewStyles = StyleSheet.create({
+  paletteContainer: {
+    width: "80%",
+    height: 48,
+    backgroundColor: "#E4E4E4",
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 10,
+    padding: 6,
+    marginVertical: 10
+  },
+  selected: {
+    borderRadius: 10,
+    flex: 1,
+    backgroundColor: "#fff",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "gray",
+    elevation: 10
+  },
+  unSelected: {
+    flex: 1,
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#E4E4E4",
+    borderRadius: 10
+  }
+});
+
+const Separator = ({ title }) => {
+  return (
+    <View style={separatorStyles.separator}>
+      <Text style={separatorStyles.separatorText}>{title}</Text>
+      <TabView
+        tabTitles={["Choose"]}
+        selected={0}
+        style={separatorStyles.tabView}
+      />
+    </View>
+  );
+};
+
+const separatorStyles = StyleSheet.create({
+  separator: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginVertical: 10
+  },
+  separatorText: {
+    fontSize: 16,
+    color: "#12D790",
+    flex: 1
+  },
+  tabView: {
+    width: 120,
+    marginVertical: 0
+  }
+});
+
+const Checkbox = (props) => {
+  return (
+    <Pressable
+      onPress={() => {
+        props.setValue(!props.value);
+      }}
+      style={[checkboxStyles.container, props.style]}
+    >
+      <Image
+        source={
+          props.value
+            ? require("./assets/checkboxIconActive.png")
+            : require("./assets/checkboxIcon.png")
+        }
+        style={[checkboxStyles.checkbox]}
+      />
+    </Pressable>
+  );
+};
+
+const checkboxStyles = StyleSheet.create({
+  container: {
+    height: 20,
+    width: 20
+  },
+  checkbox: {
+    height: "100%",
+    width: "100%"
+  }
+});
+
+const Tile = ({ title, onPress, selected }) => {
+  return (
+    <View style={tileStyles.container}>
+      <Text style={tileStyles.title}>{title}</Text>
+      <Checkbox
+        style={tileStyles.checkbox}
+        value={selected}
+        setValue={() => onPress(title)}
+      />
+    </View>
+  );
+};
+
+const tileStyles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 10,
+    borderBottomColor: "#e6e6e6",
+    borderBottomWidth: 1
+  },
+  title: {
+    fontSize: 16,
+    color: "#111112"
+  }
+});
+const Button = (params) => {
+  const backgroundColor = params.color ? params.color : "#000";
+  const textColor = params.textColor ? params.textColor : "#fff";
   const btnStyle = {
-    backgroundColor: params.outline ? "#fff" : "#000",
-    borderColor: params.outline ? "#000" : "#fff",
-    borderWidth: 1
+    backgroundColor: params.outline ? "#fff" : backgroundColor,
+    borderColor: params.outline ? backgroundColor : null,
+    borderWidth: params.outline ? 1 : 0
   };
   const btnText = {
-    color: params.outline ? "#000" : "#fff"
+    color: params.outline ? "#000" : textColor
   };
   return (
     <View style={buttonStyles.btnContainer}>
-      <Pressable style={[buttonStyles.btn, btnStyle]} onPress={params.onPress}>
-        <Text style={[buttonStyles.btnText, btnText]}>{params.buttonText}</Text>
-        <View style={styles.childrenContainer}>{params.children}</View>
-      </Pressable>
+      <View style={!params.hideShadow ? buttonStyles.shadowContainer : null}>
+        <Pressable
+          style={[buttonStyles.btn, btnStyle, params.style]}
+          onPress={params.onPress}
+        >
+          <Text style={[buttonStyles.btnText, btnText]}>
+            {params.buttonText}
+          </Text>
+          <View style={styles.childrenContainer}>{params.children}</View>
+        </Pressable>
+      </View>
     </View>
   );
 };
@@ -200,8 +419,13 @@ const buttonStyles = StyleSheet.create({
     justifyContent: "center",
     marginVertical: 20
   },
+  shadowContainer: {
+    shadowColor: "rgba(0, 0, 0, 0.5)",
+    elevation: 10,
+    backgroundColor: "#fff",
+    borderRadius: 10
+  },
   btn: {
-    backgroundColor: "black",
     height: 50,
     width: "100%",
     padding: 10,
@@ -209,8 +433,7 @@ const buttonStyles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "rgba(0, 0, 0, 0.2)",
-    elevation: 10,
+
     flexDirection: "row"
   },
   btnText: {

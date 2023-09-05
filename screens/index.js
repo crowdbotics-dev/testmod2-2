@@ -1,99 +1,67 @@
 import React from "react";
-import { Text, StyleSheet, View, Image, Pressable } from "react-native";
+import { Image, Text, StyleSheet, View, ScrollView } from "react-native";
 
-const UploadMediaScreen = (params) => {
+const BudgetingForecastingScreen = () => {
   return (
-    <View style={styles.container}>
-      <View style={styles.menu}>
-        <View style={styles.menuItem}>
-          <Text style={styles.menuItemText}>Take photo or video</Text>
-          <Image source={require("./assets/cameraIcon.png")} />
+    <ScrollView>
+    <View>
+      <View style={styles.container}>
+        <View>
+          <Text>Current Balance</Text>
+          <Text style={styles.currentBalance}>$35,559.00</Text>
+          <Text>Bank Account: 0954 4543 2112 3116</Text>
         </View>
-        <View style={styles.menuItem}>
-          <Text style={styles.menuItemText}>Photo Library</Text>
-          <Image source={require("./assets/libraryIcon.png")} />
-        </View>
-        <View style={styles.menuItem}>
-          <Text style={styles.menuItemText}>Browse</Text>
-          <Image source={require("./assets/menuIcon.png")} />
+        <View>
+          <Image resizeMode="contain" style={styles.withdrawImage} source={require("./assets/withdraw.png")} />
         </View>
       </View>
-      <Button buttonText="Cancel" outline={true} />
+      <View style={styles.balanceImage}>
+        <Image resizeMode="contain" style={styles.imageHW} source={require("./assets/balance.png")} />
+      </View>
+      <View style={styles.monthlySpendingImage}>
+        <Image resizeMode="contain" style={styles.imageHW} source={require("./assets/monthly-spending.png")} />
+      </View>
+      <View style={styles.totalSpendingImage}>
+        <Image resizeMode="contain" style={styles.imageHW} source={require("./assets/total-spending.png")} />
+      </View>
     </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    padding: 20,
-    justifyContent: "flex-end"
-  },
-  menuItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    justifyContent: "space-between",
-    borderBottomWidth: 1,
-    borderColor: "#ccc"
-  },
-  menuItemText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#000",
-    textAlign: "left"
-  }
-});
-export default UploadMediaScreen;
-
-const Button = (params) => {
-  const btnStyle = {
-    backgroundColor: params.outline ? "#fff" : "#000",
-    borderColor: params.outline ? "#000" : "#fff",
-    borderWidth: 1
-  };
-  const btnText = {
-    color: params.outline ? "#000" : "#fff"
-  };
-  return (
-    <View style={buttonStyles.btnContainer}>
-      <Pressable style={[buttonStyles.btn, btnStyle]} onPress={params.onPress}>
-        <Text style={[buttonStyles.btnText, btnText]}>{params.buttonText}</Text>
-        <View style={styles.childrenContainer}>{params.children}</View>
-      </Pressable>
-    </View>
-  );
-};
-
-const buttonStyles = StyleSheet.create({
-  btnContainer: {
-    paddingTop: 10,
-    paddingHorizontal: 20,
-    justifyContent: "center",
-    marginTop: 20
-  },
-  btn: {
-    backgroundColor: "black",
-    height: 50,
-    width: "100%",
     padding: 10,
-    paddingHorizontal: 25,
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "rgba(0, 0, 0, 0.2)",
-    elevation: 10,
-    flexDirection: "row"
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+    marginVertical: 20
   },
-  btnText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold"
+  currentBalance: {
+    fontSize: 36,
+    marginVertical: 5
   },
-  childrenContainer: {
-    justifyContent: "center",
-    alignItems: "center"
+  withdrawImage: {
+    width: 52,
+    height: 73
+  },
+  balanceImage: {
+    backgroundColor: "#FFF",
+    height: 610
+  },
+  monthlySpendingImage: {
+    backgroundColor: "#FFF",
+    height: 200
+  },
+  totalSpendingImage: {
+    backgroundColor: "#FFF",
+    height: 600
+  },
+  imageHW: {
+    width: "100%",
+    height: "100%"
   }
 });
+
+export default BudgetingForecastingScreen;

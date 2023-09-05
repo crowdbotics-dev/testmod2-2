@@ -1,67 +1,225 @@
-import React from "react";
-import { Image, Text, StyleSheet, View, ScrollView } from "react-native";
-
-const BudgetingForecastingScreen = () => {
+import React, { useState, useEffect } from "react";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TextInput,
+  Pressable,
+  ScrollView
+} from "react-native";
+import { Slider } from "react-native-elements";
+const BudgetFilter = () => {
+  const [options, setOptions] = useState([]);
+  const [rangeStart, setRangeStart] = useState("");
+  const [rangeEnd, setRangeEnd] = useState("");
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  useEffect(() => {
+    setOptions(["Per Hour", "Per Day", "Per Week", "Per Month"]);
+  }, []);
+  const handleSelect = option => {
+    const newSelectedOptions = [...selectedOptions];
+    if (newSelectedOptions.includes(option)) {
+      newSelectedOptions.splice(newSelectedOptions.indexOf(option), 1);
+    } else {
+      newSelectedOptions.push(option);
+    }
+    setSelectedOptions(newSelectedOptions);
+  };
   return (
-    <ScrollView>
-    <View>
-      <View style={styles.container}>
-        <View>
-          <Text>Current Balance</Text>
-          <Text style={styles.currentBalance}>$35,559.00</Text>
-          <Text>Bank Account: 0954 4543 2112 3116</Text>
+    <View style={styles.container}>
+      <ScrollView>
+        <Text style={styles.heading}>Filter/Budget</Text>
+        <View style={styles.frequencyList}>
+          {options.map((option, index) => (
+            <Tile
+              key={index}
+              option={option}
+              selected={selectedOptions.includes(option)}
+              onPress={() => handleSelect(option)}
+            />
+          ))}
         </View>
-        <View>
-          <Image resizeMode="contain" style={styles.withdrawImage} source={require("./assets/withdraw.png")} />
+        <View style={styles.halfInputs}>
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputText}>From</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={text => setRangeStart(text)}
+              value={rangeStart}
+              placeholder="Enter"
+              placeholderTextColor="#9B9B9B"
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputText}>Search</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={text => setRangeEnd(text)}
+              value={rangeEnd}
+              placeholder="Enter"
+              placeholderTextColor="#9B9B9B"
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
+          </View>
         </View>
-      </View>
-      <View style={styles.balanceImage}>
-        <Image resizeMode="contain" style={styles.imageHW} source={require("./assets/balance.png")} />
-      </View>
-      <View style={styles.monthlySpendingImage}>
-        <Image resizeMode="contain" style={styles.imageHW} source={require("./assets/monthly-spending.png")} />
-      </View>
-      <View style={styles.totalSpendingImage}>
-        <Image resizeMode="contain" style={styles.imageHW} source={require("./assets/total-spending.png")} />
-      </View>
+        <View style={styles.sliderContainer}>
+          <Text style={styles.heading}>Set Pricing</Text>
+          <Slider
+            minimumValue={0}
+            maximumValue={100}
+            minimumTrackTintColor="#000"
+            maximumTrackTintColor="#9B9B9B"
+            thumbTintColor="#000"
+            step={1}
+            value={50}
+            // thumb size
+            thumbStyle={styles.thumb}
+          />
+        </View>
+        <View style={styles.button}>
+          <Button buttonText={"Done"} />
+        </View>
+      </ScrollView>
     </View>
-    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
-    display: "flex",
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingHorizontal: 20
+  },
+  heading: {
+    fontSize: 16,
+    marginVertical: 10
+  },
+  frequencyList: {
+    marginTop: 40
+  },
+  tile: {
     flexDirection: "row",
-    alignItems: "flex-end",
     justifyContent: "space-between",
-    marginVertical: 20
+    alignItems: "center",
+    paddingVertical: 10,
+    borderBottomColor: "#F0F2F7",
+    borderBottomWidth: 1,
+    paddingHorizontal: 10
   },
-  currentBalance: {
-    fontSize: 36,
-    marginVertical: 5
+  optionName: {
+    flex: 1
   },
-  withdrawImage: {
-    width: 52,
-    height: 73
+  halfInputs: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 20
   },
-  balanceImage: {
-    backgroundColor: "#FFF",
-    height: 610
+  inputContainer: {
+    flexDirection: "column",
+    justifyContent: "center",
+    marginHorizontal: 5,
+    flex: 1
   },
-  monthlySpendingImage: {
-    backgroundColor: "#FFF",
-    height: 200
+  inputText: {
+    fontSize: 16,
+    marginLeft: 20,
+    color: "#111112"
   },
-  totalSpendingImage: {
-    backgroundColor: "#FFF",
-    height: 600
-  },
-  imageHW: {
+  input: {
+    borderWidth: 1,
+    borderColor: "#e6e6e6",
+    borderRadius: 10,
+    padding: 10,
+    paddingLeft: 20,
+    marginVertical: 10,
     width: "100%",
-    height: "100%"
+    height: 50
+  },
+  sliderContainer: {
+    marginTop: 20
+  },
+  thumb: {
+    width: 20,
+    height: 20
+  },
+  button: {
+    marginTop: 120
+  },
+  checkbox: {
+    width: 25,
+    height: 25
   }
 });
 
-export default BudgetingForecastingScreen;
+export default BudgetFilter;
+
+const Tile = ({ option, selected, onPress }) => {
+  return (
+    <View style={styles.tile}>
+      <Text style={styles.optionName}>{option}</Text>
+      <Pressable onPress={onPress}>
+        <Image
+          source={
+            selected
+              ? require("./assets/checkboxIconActive.png")
+              : require("./assets/checkboxIcon.png")
+          }
+          style={styles.checkbox}
+        />
+      </Pressable>
+    </View>
+  );
+};
+
+const Button = params => {
+  const btnStyle = {
+    backgroundColor: params.outline ? "#fff" : "#000",
+    borderColor: params.outline ? "#000" : "#fff",
+    borderWidth: 1
+  };
+  const btnText = {
+    color: params.outline ? "#000" : "#fff"
+  };
+  return (
+    <View style={buttonStyles.btnContainer}>
+      <Pressable style={[buttonStyles.btn, btnStyle]} onPress={params.onPress}>
+        <Text style={[buttonStyles.btnText, btnText]}>{params.buttonText}</Text>
+        <View style={styles.childrenContainer}>{params.children}</View>
+      </Pressable>
+    </View>
+  );
+};
+
+const buttonStyles = StyleSheet.create({
+  btnContainer: {
+    paddingHorizontal: 40,
+    justifyContent: "center",
+    marginVertical: 20
+  },
+  btn: {
+    backgroundColor: "black",
+    height: 50,
+    width: "100%",
+    padding: 10,
+    paddingHorizontal: 25,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "rgba(0, 0, 0, 0.2)",
+    elevation: 10,
+    flexDirection: "row"
+  },
+  btnText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold"
+  },
+  childrenContainer: {
+    justifyContent: "center",
+    alignItems: "center"
+  }
+});

@@ -1,135 +1,141 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Text,
-  View,
   StyleSheet,
+  View,
   Image,
-  ImageBackground,
+  TextInput,
   Pressable
 } from "react-native";
 
-const InAppTutorial = () => {
+const RateTheAppScreen = (params) => {
+  const [review, setReview] = useState("");
   return (
     <View style={styles.container}>
-      <ImageBackground
-        style={styles.thumbnail}
-        source={require("./assets/thumbnail.png")}>
-        <Image
-          source={require("./assets/playButtonIcon.png")}
-          style={styles.playButton}
-        />
-      </ImageBackground>
+      <View style={styles.header}>
+        <Text style={styles.heading}>How was your experience?</Text>
+        <Text style={styles.subhHeading}>
+          Use 5 star rating to rate an app or leave a text review.
+        </Text>
+      </View>
       <Image
-        source={require("./assets/sliderIcon.png")}
-        style={styles.sliderIcon}
+        source={require("./assets/5starsImage.png")}
+        style={styles.image}
       />
-      <Button buttonText="Proceed" style={styles.button} />
-      <Button
-        buttonText="Skip"
-        style={styles.button}
-        color="white"
-        textColor="#000"
-        hideShadow={true}>
-        <Image
-          source={require("./assets/rightArrowIcon.png")}
-          style={styles.arrowIcon}
+      <Image
+        source={require("./assets/separator.png")}
+        style={styles.separator}
+      />
+      <View style={styles.inputContainer}>
+        <Text style={styles.inputText}>Text review</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => setReview(text)}
+          value={review}
+          placeholder="Enter"
+          placeholderTextColor="#9B9B9B"
+          autoCapitalize="none"
+          autoCorrect={false}
         />
-      </Button>
+      </View>
+      <Button buttonText={"Submit"} />
+      <Button buttonText={"Cancel"} outline={true} />
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingHorizontal: 20
+    justifyContent: "center"
   },
-  thumbnail: {
-    width: 330,
-    height: 440,
-    alignItems: "center",
+  header: {
     justifyContent: "center",
-    alignSelf: "center",
-    marginVertical: 20,
-    borderRadius: 10,
-    overflow: "hidden"
+    alignItems: "center",
+    paddingHorizontal: 50
   },
-  playButton: {
-    width: 60,
-    height: 60
+  heading: {
+    fontSize: 24,
+    fontWeight: "bold"
   },
-  sliderIcon: {
-    width: 40,
-    height: 10,
+  subhHeading: {
+    fontSize: 15,
+    lineHeight: 20,
+    marginTop: 10,
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  image: {
     alignSelf: "center"
   },
-  button: {
-    marginVertical: 20,
+  separator: {
+    alignSelf: "center",
+    marginVertical: 30
+  },
+  inputContainer: {
+    flexDirection: "column",
+    justifyContent: "center",
     marginHorizontal: 20
   },
-  arrowIcon: {
-    width: 10,
-    height: 10,
-    resizeMode: "contain",
-    marginLeft: 10
+  inputText: {
+    fontSize: 16,
+    marginLeft: 20,
+    color: "#111112"
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#e6e6e6",
+    borderRadius: 10,
+    padding: 10,
+    paddingLeft: 20,
+    marginVertical: 10,
+    width: "100%",
+    height: 150
   }
 });
+export default RateTheAppScreen;
 
-export default InAppTutorial;
-const Button = params => {
-  const backgroundColor = params.color || "#000";
-  const textColor = params.textColor || "#fff";
+const Button = ({ onPress, buttonText, outline }) => {
   const btnStyle = {
-    backgroundColor: backgroundColor,
-    borderColor: params.outlineColor || backgroundColor,
+    backgroundColor: outline ? "#fff" : "#000",
+    borderColor: outline ? "#000" : "#fff",
     borderWidth: 1
   };
   const btnText = {
-    color: textColor
+    color: outline ? "#000" : "#fff"
   };
   return (
-    <View style={[buttonStyles.btnContainer, params.style]}>
-      <View style={!params.hideShadow ? buttonStyles.shadowContainer : null}>
-        <Pressable
-          style={[buttonStyles.btn, btnStyle]}
-          onPress={params.onPress}>
-          <Text style={[buttonStyles.btnText, btnText]}>
-            {params.buttonText}
-          </Text>
-          <View style={styles.childrenContainer}>{params.children}</View>
-        </Pressable>
-      </View>
+    <View style={buttonStyles.btnContainer}>
+      <Pressable style={[buttonStyles.btn, btnStyle]} onPress={onPress}>
+        <Text style={[buttonStyles.btnText, btnText]}>{buttonText}</Text>
+      </Pressable>
     </View>
   );
 };
 
 const buttonStyles = StyleSheet.create({
   btnContainer: {
-    justifyContent: "center"
-  },
-  shadowContainer: {
-    shadowColor: "rgba(0, 0, 0, 0.5)",
-    elevation: 10,
-    backgroundColor: "#fff",
-    borderRadius: 10
+    paddingTop: 10,
+    paddingHorizontal: 40,
+    justifyContent: "center",
+    marginTop: 20
   },
   btn: {
+    backgroundColor: "black",
     height: 50,
+    width: "100%",
     padding: 10,
     paddingHorizontal: 25,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-
-    flexDirection: "row"
+    shadowColor: "rgba(0, 0, 0, 0.2)",
+    elevation: 10
   },
   btnText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold"
-  },
-  childrenContainer: {
-    justifyContent: "center",
-    alignItems: "center"
   }
 });

@@ -1,166 +1,143 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Pressable, Image } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  TextInput,
+  Image,
+  Pressable,
+  ScrollView
+} from "react-native";
 
-const LinkedBankAccountsDetails = () => {
-  const [selectedTab, setSelectedTab] = useState(0);
-  const [bankAccounts, setBankAccounts] = useState([]);
-  const [selectedBankAccounts, setSelectedBankAccounts] = useState([]);
+const BanksFilter = () => {
+  const [bankName, setBankName] = useState("");
+  const [banks, setBanks] = useState([]);
+  const [selectedBanks, setSelectedBanks] = useState([]);
   useEffect(() => {
-    setBankAccounts([
+    setBanks([
       {
-        name: "Account name",
-        balance: "$12,215.25"
+        name: "Bank name",
+        image: require("./assets/bank1.png")
       },
       {
-        name: "Account name",
-        balance: "$12,215.25"
+        name: "Bank name",
+        image: require("./assets/bank2.png")
       },
       {
-        name: "Account name",
-        balance: "$12,215.25"
+        name: "Bank name",
+        image: require("./assets/bank3.png")
       },
       {
-        name: "Account name",
-        balance: "$12,215.25"
+        name: "Bank name",
+        image: require("./assets/bank1.png")
+      },
+      {
+        name: "Bank name",
+        image: require("./assets/bank2.png")
+      },
+      {
+        name: "Bank name",
+        image: require("./assets/bank3.png")
       }
     ]);
   }, []);
-  const handleSelect = (item) => {
-    if (selectedBankAccounts.includes(item)) {
-      setSelectedBankAccounts(selectedBankAccounts.filter((i) => i !== item));
+  const handleBankPress = bank => {
+    const newSelectedBanks = [...selectedBanks];
+    if (newSelectedBanks.includes(bank)) {
+      newSelectedBanks.splice(newSelectedBanks.indexOf(bank), 1);
     } else {
-      setSelectedBankAccounts([...selectedBankAccounts, item]);
+      newSelectedBanks.push(bank);
     }
+    setSelectedBanks(newSelectedBanks);
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Account Details</Text>
-      <Text style={styles.subHeading}>Choose</Text>
-      <TabView
-        tabTitles={["Personal", "Investment"]}
-        selected={selectedTab}
-        onPress={setSelectedTab}
-        style={styles.tabView}
-      />
-      <Text style={styles.listText}>List of all accounts</Text>
-      {bankAccounts.map((account, index) => (
-        <View key={index}>
-          <View style={styles.nameContainer}>
-            <Text style={styles.name}>{account.name}</Text>
-            <Checkbox
-              value={selectedBankAccounts.includes(account)}
-              setValue={() => handleSelect(account)}
+      <ScrollView style={styles.scrollView}>
+        <Input
+          text="Search"
+          value={bankName}
+          onChange={setBankName}
+          icon={require("./assets/searchIcon.png")}
+          containerStyle={styles.inputContainer}
+        />
+        <TabView tabTitles={["Choose Bank"]} selected={0} />
+        <View style={styles.banksList}>
+          {banks.map((bank, index) => (
+            <Bank
+              key={index}
+              bank={bank}
+              selected={selectedBanks.includes(bank)}
+              onPress={() => handleBankPress(bank)}
             />
-          </View>
-          <View style={styles.balanceContainer}>
-            <Text>Amount</Text>
-            <Text style={styles.balance}>{account.balance}</Text>
-          </View>
+          ))}
         </View>
-      ))}
-      <Button buttonText="Select Account" style={styles.button} />
+        <View style={styles.button}>
+          <Button buttonText={"Proceed"} />
+        </View>
+      </ScrollView>
     </View>
   );
 };
+
+const Bank = ({ bank, selected, onPress }) => {
+  return (
+    <View style={styles.bank}>
+      <Image source={bank.image} />
+      <Text style={styles.bankName}>{bank.name}</Text>
+      <Checkbox value={selected} style={styles.checkbox} setValue={onPress} />
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    paddingHorizontal: 20
+    backgroundColor: "#fff"
   },
-  heading: {
-    fontSize: 20,
-    color: "#000"
+  inputContainer: {
+    flexDirection: "column",
+    justifyContent: "center",
+    marginHorizontal: 20
   },
-  subHeading: {
-    fontSize: 14,
-    color: "#999999"
+  banksList: {
+    marginHorizontal: 30
   },
-  tabView: {
-    width: "70%"
-  },
-  listText: {
-    marginVertical: 20
-  },
-  nameContainer: {
+  bank: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginVertical: 10,
-    paddingHorizontal: 10
+    paddingVertical: 10,
+    borderBottomColor: "#F0F2F7",
+    borderBottomWidth: 1
   },
-  balanceContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 12,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    paddingHorizontal: 10,
-    borderRadius: 10
-  },
-  balance: {
-    fontSize: 14,
-    color: "#12D790"
+  bankName: {
+    flex: 1,
+    marginLeft: 20
   },
   button: {
-    flex: 1,
-    justifyContent: "flex-end",
-    marginBottom: 20
+    marginTop: 100
+  },
+  checkbox: {
+    width: 25,
+    height: 25
   }
 });
 
-export default LinkedBankAccountsDetails;
+export default BanksFilter;
 
-const TabView = ({
-  tabTitles,
-  selected,
-  onPress,
-  tabColor,
-  backgroundColor,
-  style,
-  icons
-}) => {
-  const tabColorStyle = {
-    backgroundColor: tabColor || "#fff"
-  };
-  const backgroundColorStyle = {
-    backgroundColor: backgroundColor || "#F1F1F1"
-  };
-  const propStyle = style || {};
+const TabView = ({ tabTitles, selected }) => {
   return (
-    <View
-      style={[tabViewStyles.paletteContainer, backgroundColorStyle, propStyle]}
-    >
+    <View style={tabViewStyles.paletteContainer}>
       {tabTitles.map((title, index) => (
-        <Pressable
-          onPress={() => (onPress ? onPress(index) : null)}
+        <View
           style={
             index === selected
-              ? [tabViewStyles.selected, tabColorStyle, tabViewStyles.tabItem]
-              : [
-                  tabViewStyles.unSelected,
-                  backgroundColorStyle,
-                  tabViewStyles.tabItem
-                ]
+              ? tabViewStyles.selected
+              : tabViewStyles.unSelected
           }
-          key={index}
-        >
-          {icons
-            ? (
-            <Image
-              source={icons[index]}
-              style={[
-                tabViewStyles.icon,
-                index === selected
-                  ? tabViewStyles.selectedIcon
-                  : tabViewStyles.unSelectedIcon
-              ]}
-            />
-              )
-            : null}
+          key={index}>
           <Text>{title}</Text>
-        </Pressable>
+        </View>
       ))}
     </View>
   );
@@ -168,120 +145,77 @@ const TabView = ({
 
 const tabViewStyles = StyleSheet.create({
   paletteContainer: {
+    width: 150,
     height: 48,
     backgroundColor: "#E4E4E4",
     flexDirection: "row",
     alignItems: "center",
     borderRadius: 10,
     padding: 6,
-    marginVertical: 10
+    marginVertical: 10,
+    marginHorizontal: 20
   },
-  tabItem: {
+  selected: {
     borderRadius: 10,
     flex: 1,
+    backgroundColor: "#fff",
     height: "100%",
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "row"
-  },
-  selected: {
     shadowColor: "gray",
     elevation: 10
   },
   unSelected: {
-    backgroundColor: "#f1f1f1"
-  },
-  icon: {
-    width: 20,
-    height: 20,
-    resizeMode: "contain",
-    marginRight: 5
-  },
-  selectedIcon: {
-    tintColor: "#000"
-  },
-  unSelectedIcon: {
-    tintColor: "#7C7C7C"
-  }
-});
-
-const Checkbox = (props) => {
-  return (
-    <Pressable
-      onPress={() => {
-        props.setValue(!props.value);
-      }}
-      style={[checkboxStyles.container, props.style]}
-    >
-      <Image
-        source={
-          props.value
-            ? require("./assets/checkboxIconActive.png")
-            : require("./assets/checkboxIcon.png")
-        }
-        style={[checkboxStyles.checkbox]}
-      />
-    </Pressable>
-  );
-};
-
-const checkboxStyles = StyleSheet.create({
-  container: {
-    height: 20,
-    width: 20
-  },
-  checkbox: {
+    flex: 1,
     height: "100%",
-    width: "100%"
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#E4E4E4",
+    borderRadius: 10
   }
 });
 
-const Button = (params) => {
-  const backgroundColor = params.color || "#000";
-  const textColor = params.textColor || "#fff";
+const Button = params => {
   const btnStyle = {
-    backgroundColor: backgroundColor,
-    borderColor: params.outlineColor || backgroundColor,
+    backgroundColor: params.outline ? "#fff" : "#000",
+    borderColor: params.outline ? "#000" : "#fff",
     borderWidth: 1
   };
   const btnText = {
-    color: textColor
+    color: params.outline ? "#000" : "#fff"
+  };
+  const pinned = {
+    flex: 1,
+    justifyContent: "flex-end"
   };
   return (
-    <View style={[buttonStyles.btnContainer, params.style]}>
-      <View style={!params.hideShadow ? buttonStyles.shadowContainer : null}>
-        <Pressable
-          style={[buttonStyles.btn, btnStyle]}
-          onPress={params.onPress}
-        >
-          <Text style={[buttonStyles.btnText, btnText]}>
-            {params.buttonText}
-          </Text>
-          <View style={styles.childrenContainer}>{params.children}</View>
-        </Pressable>
-      </View>
+    <View
+      style={[buttonStyles.btnContainer, params.stickToBottom ? pinned : null]}>
+      <Pressable style={[buttonStyles.btn, btnStyle]} onPress={params.onPress}>
+        <Text style={[buttonStyles.btnText, btnText]}>{params.buttonText}</Text>
+        <View style={styles.childrenContainer}>{params.children}</View>
+      </Pressable>
     </View>
   );
 };
 
 const buttonStyles = StyleSheet.create({
   btnContainer: {
-    justifyContent: "center"
-  },
-  shadowContainer: {
-    shadowColor: "rgba(0, 0, 0, 0.5)",
-    elevation: 10,
-    backgroundColor: "#fff",
-    borderRadius: 10
+    paddingHorizontal: 40,
+    justifyContent: "center",
+    marginVertical: 20
   },
   btn: {
+    backgroundColor: "black",
     height: 50,
+    width: "100%",
     padding: 10,
     paddingHorizontal: 25,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-
+    shadowColor: "rgba(0, 0, 0, 0.2)",
+    elevation: 10,
     flexDirection: "row"
   },
   btnText: {
@@ -293,4 +227,116 @@ const buttonStyles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   }
+});
+
+const Checkbox = props => {
+  return (
+    <Pressable
+      onPress={() => {
+        props.setValue(!props.value);
+      }}>
+      <Image
+        source={
+          props.value
+            ? require("./assets/checkboxIconActive.png")
+            : require("./assets/checkboxIcon.png")
+        }
+        style={[checkboxStyles.checkbox, props.style]}
+      />
+    </Pressable>
+  );
+};
+
+const checkboxStyles = StyleSheet.create({
+  checkbox: {
+    height: 20,
+    width: 20
+  }
+});
+
+const Input = props => {
+  return (
+    <View style={[inputStyles.inputContainer, props.containerStyle]}>
+      {props.text
+        ? (
+        <Text style={inputStyles.inputText}>{props.text}</Text>
+          )
+        : null}
+
+      <TextInput
+        style={[
+          inputStyles.input,
+          props.style,
+          props.textArea ? inputStyles.textArea : null
+        ]}
+        placeholder={props.placeholder ? props.placeholder : "Enter"}
+        value={props.value}
+        onChangeText={text => props.onChange(text)}
+        placeholderTextColor={
+          props.placeholderTextColor ? props.placeholderTextColor : "#9B9B9B"
+        }
+        editable={props.editable !== false}
+        autoCapitalize="none"
+        autoCorrect={false}
+        multiline={!!props.textArea}
+      />
+      {props.errorText
+        ? (
+        <Text style={inputStyles.error}>{props.errorText}</Text>
+          )
+        : null}
+      {props.icon
+        ? (
+        <Image
+          source={props.icon}
+          style={
+            props.text ? inputStyles.iconWithText : inputStyles.iconWithoutText
+          }
+        />
+          )
+        : null}
+      <View style={styles.children}>{props.children}</View>
+    </View>
+  );
+};
+
+const inputStyles = StyleSheet.create({
+  inputContainer: {
+    flexDirection: "column",
+    justifyContent: "center",
+    flex: 1
+  },
+  inputText: {
+    fontSize: 14,
+    marginLeft: 20,
+    color: "#111112"
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#e6e6e6",
+    borderRadius: 10,
+    padding: 10,
+    paddingLeft: 20,
+    marginVertical: 10,
+    width: "100%",
+    height: 50
+  },
+  iconWithText: {
+    position: "absolute",
+    right: 30,
+    top: 48,
+    height: 15,
+    width: 15
+  },
+  iconWithoutText: {
+    position: "absolute",
+    right: 30,
+    top: 28,
+    height: 15,
+    width: 15
+  },
+  textArea: {
+    height: 150
+  },
+  children: {}
 });

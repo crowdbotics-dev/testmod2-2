@@ -3,85 +3,182 @@ import {
   Text,
   StyleSheet,
   View,
-  Image,
+  SafeAreaView,
   TextInput,
-  Pressable
+  Switch,
+  ScrollView
 } from "react-native";
 
-const RateTheAppScreen = (params) => {
-  const [review, setReview] = useState("");
+const AccountSettingsScreen = (params) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [notifications, setNotifications] = useState(false);
+  const [emailNotifications, setEmailNotifications] = useState(false);
+  const [smsNotifications, setSmsNotifications] = useState(false);
+  const [deactivateAccount, setDeactivateAccount] = useState(false);
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.heading}>How was your experience?</Text>
-        <Text style={styles.subhHeading}>
-          Use 5 star rating to rate an app or leave a text review.
-        </Text>
-      </View>
-      <Image
-        source={require("./assets/5starsImage.png")}
-        style={styles.image}
-      />
-      <Image
-        source={require("./assets/separator.png")}
-        style={styles.separator}
-      />
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputText}>Text review</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={(text) => setReview(text)}
-          value={review}
-          placeholder="Enter"
-          placeholderTextColor="#9B9B9B"
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-      </View>
-      <Button buttonText={"Submit"} />
-      <Button buttonText={"Cancel"} outline={true} />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <View style={styles.subContainer}>
+          <Text style={styles.subText}>Subscription</Text>
+          <View style={styles.subPallet}>
+            <View style={styles.planDes}>
+              <Text style={[styles.fnt25, styles.boldText]}>Plan</Text>
+              <Text style={styles.fnt16}>Description</Text>
+            </View>
+            <View style={styles.subPricing}>
+              <Text style={[styles.fnt25, styles.boldText]}>$14.99 </Text>
+              <Text style={styles.fnt16}>per month</Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.billingContainer}>
+          <Text style={styles.billingText}>Billing information</Text>
+          <View style={styles.nameInput}>
+            <Text style={styles.inputText}>Full Name</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter your full name"
+              placeholderTextColor="#9B9B9B"
+              autoCapitalize="none"
+              autoCorrect={false}
+              value={name}
+              onChangeText={(text) => setName(text)}
+            />
+          </View>
+          <View style={styles.nameInput}>
+            <Text style={styles.inputText}>Email Address</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter your Email Address"
+              placeholderTextColor="#9B9B9B"
+              autoCapitalize="none"
+              autoCorrect={false}
+              value={email}
+              onChangeText={(text) => setEmail(text)}
+            />
+          </View>
+          <View style={styles.nameInput}>
+            <Text style={styles.inputText}>Card number</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter your Card Number"
+              placeholderTextColor="#9B9B9B"
+              autoCapitalize="none"
+              autoCorrect={false}
+              value={cardNumber}
+              onChangeText={(text) => setCardNumber(text)}
+            />
+          </View>
+        </View>
+        <View style={styles.togglesContainer}>
+          <View style={styles.toggle}>
+            <Text style={styles.toggleText}>Notifications</Text>
+            <Switch
+              style={styles.toggleSwitch}
+              value={notifications}
+              onValueChange={(value) => setNotifications(value)}
+            />
+          </View>
+          <View style={styles.toggle}>
+            <Text style={styles.toggleText}>Email Notifications</Text>
+            <Switch
+              style={styles.toggleSwitch}
+              value={emailNotifications}
+              onValueChange={(value) => setEmailNotifications(value)}
+            />
+          </View>
+          <View style={styles.toggle}>
+            <Text style={styles.toggleText}>SMS Notifications</Text>
+            <Switch
+              style={styles.toggleSwitch}
+              value={smsNotifications}
+              onValueChange={(value) => setSmsNotifications(value)}
+            />
+          </View>
+          <View style={styles.toggle}>
+            <Text style={styles.toggleText}>Deactivate Account</Text>
+            <Switch
+              style={styles.toggleSwitch}
+              value={deactivateAccount}
+              onValueChange={(value) => setDeactivateAccount(value)}
+            />
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#fff"
+  },
+  subContainer: {
+    paddingHorizontal: 20,
+    flex: 0.2,
     justifyContent: "center"
   },
-  header: {
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 50
+  subText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    padding: 2,
+    marginVertical: 12,
+    marginLeft: 20
   },
-  heading: {
-    fontSize: 24,
+  subPallet: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#e6e6e6",
+    padding: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
+  planDes: {
+    flex: 0.4,
+    padding: 10,
+    // borderWidth: 1,
+    // borderColor: '#979797',
+    justifyContent: "center",
+    alignItems: "flex-start"
+  },
+  subPricing: {
+    flex: 0.6,
+    padding: 10,
+    // borderWidth: 1,
+    // borderColor: '#979797',
+    flexDirection: "row",
+    alignItems: "flex-end",
+    justifyContent: "center"
+  },
+  boldText: {
     fontWeight: "bold"
   },
-  subhHeading: {
-    fontSize: 15,
-    lineHeight: 20,
-    marginTop: 10,
+  fnt25: {
+    fontSize: 25
+  },
+  fnt16: {
+    fontSize: 16
+  },
+  billingContainer: {
+    flex: 0.5,
+    paddingHorizontal: 20 // borderWidth: 1,
+    // borderColor: '#979797',
+  },
+  billingText: {
+    fontSize: 16,
     fontWeight: "bold",
-    textAlign: "center"
-  },
-  image: {
-    alignSelf: "center"
-  },
-  separator: {
-    alignSelf: "center",
-    marginVertical: 30
-  },
-  inputContainer: {
-    flexDirection: "column",
-    justifyContent: "center",
-    marginHorizontal: 20
+    padding: 2,
+    marginVertical: 12,
+    marginLeft: 20
   },
   inputText: {
     fontSize: 16,
-    marginLeft: 20,
-    color: "#111112"
+    marginLeft: 20
   },
   input: {
     borderWidth: 1,
@@ -90,52 +187,23 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingLeft: 20,
     marginVertical: 10,
-    width: "100%",
-    height: 150
-  }
-});
-export default RateTheAppScreen;
-
-const Button = ({ onPress, buttonText, outline }) => {
-  const btnStyle = {
-    backgroundColor: outline ? "#fff" : "#000",
-    borderColor: outline ? "#000" : "#fff",
-    borderWidth: 1
-  };
-  const btnText = {
-    color: outline ? "#000" : "#fff"
-  };
-  return (
-    <View style={buttonStyles.btnContainer}>
-      <Pressable style={[buttonStyles.btn, btnStyle]} onPress={onPress}>
-        <Text style={[buttonStyles.btnText, btnText]}>{buttonText}</Text>
-      </Pressable>
-    </View>
-  );
-};
-
-const buttonStyles = StyleSheet.create({
-  btnContainer: {
-    paddingTop: 10,
-    paddingHorizontal: 40,
-    justifyContent: "center",
-    marginTop: 20
+    width: "100%"
   },
-  btn: {
-    backgroundColor: "black",
-    height: 50,
-    width: "100%",
-    padding: 10,
-    paddingHorizontal: 25,
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "rgba(0, 0, 0, 0.2)",
-    elevation: 10
+  togglesContainer: {
+    flex: 0.3,
+    paddingHorizontal: 20
   },
-  btnText: {
-    color: "#fff",
+  toggle: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
+  toggleText: {
     fontSize: 16,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    padding: 2,
+    marginVertical: 12,
+    marginLeft: 20
   }
 });
+export default AccountSettingsScreen;

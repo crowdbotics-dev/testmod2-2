@@ -1,5 +1,5 @@
 {
-    "name": "@screens/bank-account-details",
+    "name": "@screens/linked-bank-credentials",
     "version": "1.0.0",
     "description": "",
     "private": true,
